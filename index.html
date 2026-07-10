@@ -7,212 +7,252 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
-<body class="bg-gray-50 font-sans min-h-screen">
+<body class="bg-gray-50 font-sans h-screen flex flex-col overflow-hidden">
 
-    <header class="bg-indigo-700 text-white shadow-md py-6 px-8">
+    <!-- HEADER UTAMA (FIXED) -->
+    <header class="bg-indigo-700 text-white shadow-md py-5 px-8 flex-none z-30 relative">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold">Profiling & Penilaian Culture Fit (360)</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold">Profiling & Penilaian Culture Fit (360)</h1>
                 <p class="text-indigo-200 mt-1">Kandidat Staff Hiring Program Tahun 2026</p>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <!-- AREA KONTEN UTAMA -->
+    <main class="flex-1 overflow-hidden flex flex-col max-w-7xl mx-auto w-full relative">
         
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
-            <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">1. Filter Data</h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Wilayah</label>
-                    <select id="wilayahSelect" disabled class="w-full border-gray-300 rounded-md shadow-sm p-2 border bg-gray-50 disabled:opacity-50">
-                        <option value="">-- Memuat Data... --</option>
-                    </select>
+        <!-- ========================================== -->
+        <!-- SECTION 1: PERSIAPAN & IDENTITAS PENILAI -->
+        <!-- ========================================== -->
+        <div id="setupSection" class="p-4 sm:p-6 lg:p-8 overflow-y-auto w-full h-full">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">Langkah 1: Lengkapi Identitas Penilai</h2>
+                
+                <!-- Status Download Data Otomatis -->
+                <div id="dataStatusContainer" class="mb-8 p-5 bg-yellow-50 rounded-lg border border-yellow-200 text-yellow-800 flex items-center gap-3 transition-colors">
+                    <div id="dataStatusIcon">
+                        <!-- Icon Loading Spin -->
+                        <svg class="animate-spin h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </div>
+                    <span id="dataStatusText" class="font-semibold text-lg">Sedang menarik data dari Google Spreadsheet...</span>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Unit Kerja</label>
-                    <select id="unitKerjaSelect" disabled class="w-full border-gray-300 rounded-md shadow-sm p-2 border bg-gray-50 disabled:opacity-50">
-                        <option value="">-- Memuat Data... --</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Nama/Jabatan</label>
-                    <input type="text" id="searchNama" disabled placeholder="Ketik pencarian..." class="w-full border-gray-300 rounded-md shadow-sm p-2 border bg-gray-50 disabled:opacity-50">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Hasil / Rekomendasi</label>
-                    <select id="rekomendasiSelect" disabled class="w-full border-gray-300 rounded-md shadow-sm p-2 border bg-gray-50 disabled:opacity-50">
-                        <option value="">-- Memuat Data... --</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <div class="mb-4 flex justify-between items-center">
-            <h2 class="text-xl font-bold text-gray-800">Daftar Kandidat Keseluruhan</h2>
-            <span id="countLabel" class="bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full">0 kandidat</span>
-        </div>
-
-        <div id="candidateContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-            <div class="col-span-full text-center py-12 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
-                Mencoba terhubung dengan Google Spreadsheet...
-            </div>
-        </div>
-
-        <div id="assessmentSection" class="hidden bg-white rounded-xl shadow-lg border border-indigo-200 p-8 mb-10 scroll-mt-6">
-            <div class="border-b border-gray-200 pb-4 mb-6 flex justify-between items-end">
-                <div>
-                    <h2 class="text-2xl font-bold text-indigo-900">Penilaian Culture Fit (360)</h2>
-                    <p class="text-gray-500 mt-1">Berikan penilaian spesifik berdasarkan hasil observasi dan wawancara.</p>
-                </div>
-                <div class="bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100">
-                    <span class="text-xs text-indigo-500 font-bold uppercase tracking-wider block">Kandidat Terpilih:</span>
-                    <span id="targetKandidatName" class="text-lg font-bold text-indigo-900">Belum dipilih</span>
-                </div>
-            </div>
-
-            <form id="cultureFitForm" class="space-y-8">
-                <input type="hidden" id="inputNamaKandidat" name="nama_kandidat">
-
-                <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-100 mb-8">
-                    <h3 class="font-bold text-indigo-900 mb-4 border-b border-indigo-200 pb-2">Identitas Penilai (Wajib)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Form Identitas (Awalnya disable sebelum Data Selesai Ditarik) -->
+                <div id="identitasContainer" class="opacity-50 pointer-events-none transition-opacity duration-300">
+                    <label class="block text-sm font-bold text-indigo-900 mb-4">2. Lengkapi Identitas Penilai (Wajib)</label>
+                    <form id="identitasForm" class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700">Email</label>
-                            <input type="email" name="email_penilai" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <input type="email" id="id_email" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 border">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700">Nama Pegawai</label>
-                            <input type="text" name="nama_penilai" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <input type="text" id="id_nama" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 border">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700">NIP</label>
-                            <input type="text" name="nip_penilai" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <input type="text" id="id_nip" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 border">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700">Jabatan</label>
-                            <input type="text" name="jabatan_penilai" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <input type="text" id="id_jabatan" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 border">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-semibold text-gray-700">Unit Kerja</label>
-                            <input type="text" name="unit_penilai" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <label class="block text-sm font-semibold text-gray-700">Unit Kerja Anda</label>
+                            <select id="id_unit" required class="w-full border-gray-300 rounded-md shadow-sm p-2.5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 border font-bold text-indigo-700">
+                                <option value="">-- Menunggu Data --</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2 mt-4">
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-8 rounded-lg shadow-md transition-all text-lg">
+                                Simpan Identitas & Mulai Penilaian
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: DASHBOARD KANDIDAT (Hidden Awal)-->
+        <!-- ========================================== -->
+        <div id="dashboardSection" class="hidden flex-col h-full w-full">
+            
+            <!-- BAGIAN ATAS DASHBOARD (FIXED / STICKY) -->
+            <div class="flex-none p-4 sm:px-6 lg:px-8 bg-gray-50 z-20 border-b border-gray-200 shadow-sm relative">
+                
+                <!-- Info Penilai Aktif -->
+                <div class="bg-indigo-50 rounded-xl shadow-sm border border-indigo-100 p-4 mb-4 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider block">Penilai Aktif:</span>
+                        <span id="displayPenilaiName" class="font-bold text-indigo-900 text-lg">Nama Penilai</span> 
+                        <span class="text-gray-500 text-sm mx-2">|</span> 
+                        <span id="displayPenilaiUnit" class="font-medium text-indigo-700">Unit Kerja</span>
+                    </div>
+                    <button onclick="resetDasbor()" class="text-xs font-bold text-red-500 hover:text-red-700 underline px-3 py-1 bg-white rounded-md border border-red-200 shadow-sm">Ganti Penilai</button>
+                </div>
+
+                <!-- Form Pencarian Tunggal -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Nama / Jabatan Kandidat</label>
+                    <input type="text" id="searchNama" placeholder="Ketik nama atau jabatan kandidat yang ingin dinilai..." class="w-full border-gray-300 rounded-md shadow-sm p-2.5 border bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <!-- Header Daftar Kandidat -->
+                <div class="flex justify-between items-end mt-2 px-1">
+                    <h2 class="text-xl font-bold text-gray-800">Daftar Kandidat Unit Kerja</h2>
+                    <span id="countLabel" class="bg-indigo-100 text-indigo-800 text-sm font-bold px-4 py-1.5 rounded-full shadow-sm">0 kandidat</span>
+                </div>
+            </div>
+
+            <!-- BAGIAN BAWAH DASHBOARD (SCROLLABLE - KARTU KANDIDAT & FORM PENILAIAN) -->
+            <div id="scrollableArea" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 scroll-smooth bg-gray-50">
+                
+                <div id="candidateContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+                    <!-- Kartu Kandidat akan dimuat di sini oleh JavaScript -->
+                </div>
+
+                <!-- ========================================== -->
+                <!-- SECTION 3: FORM PENILAIAN CULTURE FIT      -->
+                <!-- ========================================== -->
+                <div id="assessmentSection" class="hidden bg-white rounded-xl shadow-lg border border-indigo-200 p-8 mb-20 max-w-4xl mx-auto">
+                    <div class="border-b border-gray-200 pb-4 mb-6 flex justify-between items-end">
+                        <div>
+                            <h2 class="text-2xl font-bold text-indigo-900">Penilaian Culture Fit (360)</h2>
+                            <p class="text-gray-500 mt-1">Berikan penilaian spesifik berdasarkan hasil observasi dan wawancara.</p>
+                        </div>
+                        <div class="bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100 text-right">
+                            <span class="text-xs text-indigo-500 font-bold uppercase tracking-wider block">Kandidat Terpilih:</span>
+                            <span id="targetKandidatName" class="text-lg font-bold text-indigo-900">Belum dipilih</span>
                         </div>
                     </div>
-                </div>
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">Apakah Saudara mengenal dan aktif berkomunikasi dengan pegawai yang di assess?</p>
-                    <div class="flex gap-6 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Pernah Berkomunikasi</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Pasif Berkomunikasi</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Aktif Berkomunikasi</span></label>
-                    </div>
-                    <textarea name="q_kenal_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                    <form id="cultureFitForm" class="space-y-6">
+                        <!-- HIDDEN DATA: Identitas Penilai & Nama Kandidat -->
+                        <input type="hidden" id="hidden_nama_kandidat" name="nama_kandidat">
+                        <input type="hidden" id="hidden_email_penilai" name="email_penilai">
+                        <input type="hidden" id="hidden_nama_penilai" name="nama_penilai">
+                        <input type="hidden" id="hidden_nip_penilai" name="nip_penilai">
+                        <input type="hidden" id="hidden_jabatan_penilai" name="jabatan_penilai">
+                        <input type="hidden" id="hidden_unit_penilai" name="unit_penilai">
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">1. Bagaimana tingkat pemahaman tugas pokok, & tanggung jawab kandidat di pekerjaannya?</p>
-                    <div class="flex gap-6 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
-                    </div>
-                    <textarea name="q1_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                        <!-- Pertanyaan-Pertanyaan Penilaian -->
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">Apakah Saudara mengenal dan aktif berkomunikasi dengan pegawai yang di assess?</p>
+                            <div class="flex flex-wrap gap-6 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Pernah Berkomunikasi</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Pasif Berkomunikasi</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Aktif Berkomunikasi</span></label>
+                            </div>
+                            <textarea name="q_kenal_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">2. Bagaimana tingkat keaktifan kandidat dalam mencari kesempatan untuk berkembang dalam mendukung tugas dan tanggung jawab pekerjaan? </p>
-                    <div class="flex gap-6 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
-                    </div>
-                    <textarea name="q2_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">1. Bagaimana tingkat pemahaman tugas pokok, & tanggung jawab kandidat di pekerjaannya?</p>
+                            <div class="flex gap-6 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
+                            </div>
+                            <textarea name="q1_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">3. Bagaimana tingkat keaktifan berkomunikasi dan bekerjasama antar rekan kerja?</p>
-                    <div class="flex gap-6 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
-                    </div>
-                    <textarea name="q3_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">2. Bagaimana tingkat keaktifan kandidat dalam mencari kesempatan untuk berkembang dalam mendukung tugas dan tanggung jawab pekerjaan? </p>
+                            <div class="flex gap-6 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
+                            </div>
+                            <textarea name="q2_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">4. Bagaimana tingkat kemampuan kandidat dalam menjalankan pekerjaan sehari–hari sesuai ketentuan?</p>
-                    <div class="flex gap-6 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
-                    </div>
-                    <textarea name="q4_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">3. Bagaimana tingkat keaktifan berkomunikasi dan bekerjasama antar rekan kerja?</p>
+                            <div class="flex gap-6 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
+                            </div>
+                            <textarea name="q3_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">5. Bagaimana tingkat perilaku kerja kandidat sebagai role model dalam implementasi butir-butir Go Spirit di Unit Kerjanya?</p>
-                    <div class="flex gap-6 mb-4">
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
-                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
-                    </div>
-                    <textarea name="q5_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">4. Bagaimana tingkat kemampuan kandidat dalam menjalankan pekerjaan sehari–hari sesuai ketentuan?</p>
+                            <div class="flex gap-6 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
+                            </div>
+                            <textarea name="q4_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
 
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                    <p class="font-bold text-gray-800 mb-3">Berikan catatan atau informasi tambahan terkait perilaku kerja individu (jika ada)</p>
-                    <textarea name="tambahan_note" rows="3" placeholder="Tuliskan informasi tambahan di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
-                </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">5. Bagaimana tingkat perilaku kerja kandidat sebagai role model dalam implementasi butir-butir Go Spirit di Unit Kerjanya?</p>
+                            <div class="flex gap-6 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Baik (skor 1)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Baik (skor 3)</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Baik (skor 5)</span></label>
+                            </div>
+                            <textarea name="q5_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
 
-                <div class="flex items-center gap-4 pt-4">
-                    <button type="submit" id="btnSubmitForm" class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all">
-                        Simpan Penilaian
-                    </button>
-                    <button type="button" onclick="closeAssessment()" class="text-gray-500 hover:text-gray-800 font-medium px-4">
-                        Batal
-                    </button>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="font-bold text-gray-800 mb-3">Berikan catatan atau informasi tambahan terkait perilaku kerja individu (jika ada)</p>
+                            <textarea name="tambahan_note" rows="3" placeholder="Tuliskan informasi tambahan di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
+                        </div>
+
+                        <div class="flex items-center gap-4 pt-4">
+                            <button type="submit" id="btnSubmitForm" class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3.5 px-8 rounded-lg shadow-md transition-all text-lg">
+                                Simpan Penilaian
+                            </button>
+                            <button type="button" onclick="closeAssessment()" class="text-gray-500 hover:text-gray-800 font-medium px-4">
+                                Batal / Tutup
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div id="formStatusMsg" class="hidden font-medium text-sm mt-2"></div>
-            </form>
+            </div>
         </div>
     </main>
 
     <script>
         // ==========================================
-        // 1. TEMPATKAN URL SPREADSHEET (CSV) DI SINI
+        // URL SPREADSHEET SUMBER DATA KANDIDAT
         // ==========================================
-        const URL_SPREADSHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQD9KYJE7XvswYg8Sr8eepuwmDgeJUu9MVllTkbwj-PbG655KWpJ6T7dpEcd0E7tGlY9UBrbM3id6M/pub?gid=1996502515&single=true&output=csv"; 
+        const URL_SPREADSHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQD9KYJE7XvswYg8Sr8eepuwmDgeJUu9MVllTkbwj-PbG655KWpJ6T7dpEcd0E7tGlY9UBrbM3id6M/pub?gid=1996502515&single=true&output=csv";
         
         // ==========================================
-        // 2. TEMPATKAN URL APPS SCRIPT (FORM) DI SINI
+        // URL APPS SCRIPT (DESTINASI PENYIMPANAN DATA)
         // ==========================================
-        const URL_APPS_SCRIPT = "URL_APPS_SCRIPT_ANDA_DISINI";
+        const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbyS0myfuc56yKGRY618KBjs2fE1fvOHP-ByDbon-hZ2HXqNHwplGwuk-3nkN5PEbIRY/exec";
 
         let allData = [];
-        let wilayahList = new Set();
+        let assessorUnitFilter = ""; // Variabel pengunci filter Unit Kerja
 
-        const wilayahSelect = document.getElementById('wilayahSelect');
-        const unitSelect = document.getElementById('unitKerjaSelect');
+        // DOM Elements
+        const identitasContainer = document.getElementById('identitasContainer');
+        const idUnitSelect = document.getElementById('id_unit');
+        
+        const dataStatusContainer = document.getElementById('dataStatusContainer');
+        const dataStatusText = document.getElementById('dataStatusText');
+        const dataStatusIcon = document.getElementById('dataStatusIcon');
+
+        const setupSection = document.getElementById('setupSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const scrollableArea = document.getElementById('scrollableArea');
+        
         const searchInput = document.getElementById('searchNama');
-        const rekomendasiSelect = document.getElementById('rekomendasiSelect');
         const container = document.getElementById('candidateContainer');
         const countLabel = document.getElementById('countLabel');
 
         const assessmentSection = document.getElementById('assessmentSection');
-        const targetKandidatName = document.getElementById('targetKandidatName');
-        const inputNamaKandidat = document.getElementById('inputNamaKandidat');
         const cultureFitForm = document.getElementById('cultureFitForm');
         const btnSubmitForm = document.getElementById('btnSubmitForm');
 
-        // Fungsi Load Data Otomatis saat halaman dimuat
+        // 1. AUTO LOAD DATA DARI URL PADA SAAT HALAMAN DIBUKA
         document.addEventListener("DOMContentLoaded", function() {
-            if(URL_SPREADSHEET_CSV === "URL_CSV_SPREADSHEET_ANDA_DISINI") {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-red-500 font-semibold border-2 border-dashed border-red-200 rounded-xl">Silakan ganti variabel URL_SPREADSHEET_CSV dengan link Publish to Web Spreadsheet Anda.</div>`;
-                return;
-            }
-
             Papa.parse(URL_SPREADSHEET_CSV, {
                 download: true,
                 header: false,
@@ -221,11 +261,14 @@
                     processData(results.data);
                 },
                 error: function(err) {
-                    container.innerHTML = `<div class="col-span-full text-center py-12 text-red-500 font-semibold">Gagal mengunduh data Spreadsheet: ${err.message}</div>`;
+                    dataStatusContainer.className = "mb-8 p-5 bg-red-50 rounded-lg border border-red-200 text-red-800 flex items-center gap-3";
+                    dataStatusIcon.innerHTML = `<svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                    dataStatusText.textContent = `Gagal mengunduh data: ${err.message}`;
                 }
             });
         });
 
+        // 2. PROSES DATA & ISI DROPDOWN UNIT KERJA PENILAI
         function processData(rawData) {
             let headerIndex = -1;
             for(let i = 0; i < rawData.length; i++) {
@@ -233,7 +276,8 @@
                 if(rowText.includes('NAMA') && rowText.includes('UNIT KERJA')) { headerIndex = i; break; }
             }
             if(headerIndex === -1) { 
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-red-500 font-semibold">Gagal menemukan kolom NAMA atau UNIT KERJA di Spreadsheet Anda.</div>`;
+                dataStatusContainer.className = "mb-8 p-5 bg-red-50 rounded-lg border border-red-200 text-red-800 flex items-center gap-3";
+                dataStatusText.textContent = "Gagal menemukan kolom NAMA atau UNIT KERJA di Spreadsheet Anda.";
                 return; 
             }
 
@@ -245,47 +289,85 @@
                 if(rowObj['NAMA'] && rowObj['NAMA'].trim() !== '') allData.push(rowObj);
             }
             
-            wilayahList.clear(); 
+            // Mengumpulkan opsi Unit Kerja yang ada di database
+            const unitList = new Set();
             allData.forEach(row => {
-                if(row['PENEMPATAN']) wilayahList.add(row['PENEMPATAN'].trim());
+                if(row['UNIT KERJA']) unitList.add(row['UNIT KERJA'].trim());
             });
 
-            wilayahSelect.innerHTML = '<option value="">-- Semua Wilayah --</option>';
-            Array.from(wilayahList).sort().forEach(wil => {
-                const option = document.createElement('option');
-                option.value = wil; option.textContent = wil;
-                wilayahSelect.appendChild(option);
-            });
-
-            updateRekomendasiDropdown();
-            
-            [wilayahSelect, unitSelect, searchInput, rekomendasiSelect].forEach(el => {
-                el.disabled = false; el.classList.remove('bg-gray-50');
-            });
-            
-            updateUnitDropdown(); 
-            filterData();
-        }
-
-        wilayahSelect.addEventListener('change', function() { updateUnitDropdown(); filterData(); });
-        unitSelect.addEventListener('change', filterData);
-        searchInput.addEventListener('input', filterData);
-        rekomendasiSelect.addEventListener('change', filterData);
-
-        function updateUnitDropdown() {
-            const selectedWilayah = wilayahSelect.value.toLowerCase();
-            unitSelect.innerHTML = '<option value="">-- Semua Unit --</option>';
-            const filteredUnits = new Set();
-            allData.forEach(row => {
-                const wil = (row['PENEMPATAN'] || '').toString().trim().toLowerCase();
-                const unit = row['UNIT KERJA'] ? row['UNIT KERJA'].trim() : '';
-                if(unit !== '' && (selectedWilayah === "" || wil === selectedWilayah)) filteredUnits.add(unit);
-            });
-            Array.from(filteredUnits).sort().forEach(unit => {
+            // Mengisi dropdown Identitas
+            idUnitSelect.innerHTML = '<option value="">-- Pilih Unit Kerja Anda --</option>';
+            Array.from(unitList).sort().forEach(unit => {
                 const option = document.createElement('option');
                 option.value = unit; option.textContent = unit;
-                unitSelect.appendChild(option);
+                idUnitSelect.appendChild(option);
             });
+
+            // Update UI Sukses Terhubung
+            dataStatusContainer.className = "mb-8 p-5 bg-green-50 rounded-lg border border-green-200 text-green-800 flex items-center gap-3 transition-colors";
+            dataStatusIcon.innerHTML = `<svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            dataStatusText.textContent = "Data berhasil ditarik! Silakan lengkapi identitas Anda di bawah ini.";
+
+            // Buka Kunci Form Identitas
+            identitasContainer.classList.remove('opacity-50', 'pointer-events-none');
+            idUnitSelect.classList.remove('bg-gray-50');
+            idUnitSelect.classList.add('bg-white');
+        }
+
+        // 3. EVENT SUBMIT IDENTITAS PENILAI -> MASUK KE DASHBOARD
+        document.getElementById('identitasForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simpan identitas ke field hidden di form penilaian
+            document.getElementById('hidden_email_penilai').value = document.getElementById('id_email').value;
+            document.getElementById('hidden_nama_penilai').value = document.getElementById('id_nama').value;
+            document.getElementById('hidden_nip_penilai').value = document.getElementById('id_nip').value;
+            document.getElementById('hidden_jabatan_penilai').value = document.getElementById('id_jabatan').value;
+            document.getElementById('hidden_unit_penilai').value = document.getElementById('id_unit').value;
+
+            // Tampilkan identitas di UI Dashboard
+            document.getElementById('displayPenilaiName').textContent = document.getElementById('id_nama').value;
+            document.getElementById('displayPenilaiUnit').textContent = document.getElementById('id_unit').value;
+
+            // Kunci Filter Dasbor ke Unit Kerja Penilai
+            assessorUnitFilter = document.getElementById('id_unit').value.toLowerCase();
+
+            // Sembunyikan Setup, Tampilkan Dashboard
+            setupSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+            dashboardSection.classList.add('flex'); // Maintain flex container
+
+            // Render Kandidat
+            filterData();
+        });
+
+        // Fitur Ganti Penilai / Reset
+        window.resetDasbor = function() {
+            if(confirm("Apakah Anda yakin ingin mengganti identitas penilai? Halaman akan dikembalikan ke form awal.")){
+                dashboardSection.classList.add('hidden');
+                dashboardSection.classList.remove('flex');
+                assessmentSection.classList.add('hidden');
+                setupSection.classList.remove('hidden');
+            }
+        }
+
+        // 4. LOGIKA FILTER DASHBOARD (Pencarian Nama)
+        searchInput.addEventListener('input', filterData);
+
+        function filterData() {
+            const typedText = searchInput.value.toLowerCase();
+            
+            const dataForCards = allData.filter(row => {
+                const unit = (row['UNIT KERJA'] || '').toLowerCase();
+                const nama = (row['NAMA'] || '').toLowerCase();
+                const jabatan = (row['JABATAN'] || '').toLowerCase();
+
+                // WAJIB MATCH DENGAN UNIT KERJA PENILAI
+                return (unit === assessorUnitFilter) &&
+                       (typedText === "" || nama.includes(typedText) || jabatan.includes(typedText));
+            });
+
+            renderCards(dataForCards);
         }
 
         function findValue(row, keywords, defaultVal = '-') {
@@ -296,51 +378,6 @@
             return defaultVal;
         }
 
-        function getRekomendasiValue(row) {
-            let rek = findValue(row, ['HASIL AKHIR SHP', 'REKOMENDASI FINAL', 'HASIL PSIKOTES'], '-');
-            return rek !== '-' ? rek : null;
-        }
-
-        function updateRekomendasiDropdown() {
-            const uniqueRek = new Set();
-            allData.forEach(row => {
-                const rek = getRekomendasiValue(row);
-                if (rek && rek !== '-') uniqueRek.add(rek);
-            });
-            const currentSelected = rekomendasiSelect.value;
-            rekomendasiSelect.innerHTML = '<option value="">-- Semua Rekomendasi --</option>';
-            Array.from(uniqueRek).sort().forEach(rek => {
-                const option = document.createElement('option');
-                option.value = rek; option.textContent = rek;
-                rekomendasiSelect.appendChild(option);
-            });
-            if (Array.from(rekomendasiSelect.options).some(opt => opt.value === currentSelected)) {
-                rekomendasiSelect.value = currentSelected;
-            }
-        }
-
-        function filterData() {
-            const selectedWilayah = wilayahSelect.value.toLowerCase();
-            const selectedUnit = unitSelect.value.toLowerCase();
-            const typedText = searchInput.value.toLowerCase();
-            const selectedRek = rekomendasiSelect.value.toLowerCase();
-            
-            const dataForCards = allData.filter(row => {
-                const wil = (row['PENEMPATAN'] || '').toLowerCase();
-                const unit = (row['UNIT KERJA'] || '').toLowerCase();
-                const nama = (row['NAMA'] || '').toLowerCase();
-                const jabatan = (row['JABATAN'] || '').toLowerCase();
-                const rekValue = getRekomendasiValue(row) || '-';
-
-                return (selectedWilayah === "" || wil === selectedWilayah) &&
-                       (selectedUnit === "" || unit === selectedUnit) &&
-                       (typedText === "" || nama.includes(typedText) || jabatan.includes(typedText)) &&
-                       (selectedRek === "" || rekValue.toLowerCase() === selectedRek);
-            });
-
-            renderCards(dataForCards);
-        }
-
         function getDriveEmbedUrl(url) {
             if (!url) return '';
             let fileId = '';
@@ -349,18 +386,36 @@
             return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : '';
         }
 
+        // 5. INTERAKSI KARTU & FORM PENILAIAN
         window.openAssessment = function(namaKandidat) {
-            targetKandidatName.textContent = namaKandidat;
-            inputNamaKandidat.value = namaKandidat;
+            document.getElementById('targetKandidatName').textContent = namaKandidat;
+            document.getElementById('hidden_nama_kandidat').value = namaKandidat;
+            
             assessmentSection.classList.remove('hidden');
-            assessmentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Scroll ke posisi Form Penilaian dengan animasi mulus (berada di dalam container flex)
+            setTimeout(() => {
+                assessmentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
 
         window.closeAssessment = function() {
             assessmentSection.classList.add('hidden');
-            cultureFitForm.reset();
+            
+            // Scroll kembali ke atas halaman tabel
+            scrollableArea.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Hanya reset input radio/text (identitas hidden aman)
+            const formElements = cultureFitForm.elements;
+            for(let i=0; i<formElements.length; i++){
+                if(formElements[i].type !== 'hidden' && formElements[i].name) {
+                    if(formElements[i].type === 'radio' || formElements[i].type === 'checkbox') formElements[i].checked = false;
+                    else formElements[i].value = '';
+                }
+            }
         }
 
+        // SUBMIT FETCH LANGSUNG (TANPA SIMULASI)
         cultureFitForm.addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -368,20 +423,10 @@
             btnSubmitForm.textContent = 'Menyimpan Data...';
             
             const formData = new FormData(cultureFitForm);
-            
-            if(URL_APPS_SCRIPT === "URL_APPS_SCRIPT_ANDA_DISINI") {
-                setTimeout(() => {
-                    alert(`[SIMULASI] Data penilaian Culture Fit untuk kandidat "${inputNamaKandidat.value}" berhasil disimpan!\n\n(Pastikan Anda mengganti URL_APPS_SCRIPT nantinya)`);
-                    btnSubmitForm.disabled = false;
-                    btnSubmitForm.textContent = 'Simpan Penilaian';
-                    closeAssessment();
-                }, 1000);
-                return;
-            }
 
             fetch(URL_APPS_SCRIPT, { method: 'POST', body: formData })
                 .then(response => {
-                    alert('Penilaian Culture Fit telah berhasil disimpan!');
+                    alert('Penilaian Culture Fit telah berhasil disimpan ke Spreadsheet!');
                     closeAssessment();
                 })
                 .catch(error => {
@@ -394,10 +439,14 @@
                 });
         });
 
+        // RENDER KARTU KANDIDAT
         function renderCards(data) {
             container.innerHTML = '';
             countLabel.textContent = `${data.length} kandidat`;
-            if(data.length === 0) { container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Tidak ada data sesuai filter.</div>`; return; }
+            if(data.length === 0) { 
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-medium bg-white rounded-xl border-2 border-dashed border-gray-200">Tidak ada data kandidat untuk Unit Kerja Anda yang sesuai dengan pencarian.</div>`; 
+                return; 
+            }
 
             data.forEach(row => {
                 const card = document.createElement('div');
@@ -449,7 +498,7 @@
                     <div class="mt-4 pt-3 border-t border-gray-100">
                         <button onclick="openAssessment('${nama.replace(/'/g, "\\'")}')" class="w-full bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white font-bold py-2.5 px-4 rounded-lg border border-indigo-200 hover:border-transparent transition-all shadow-sm flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            Penilaian Culture Fit
+                            Beri Penilaian
                         </button>
                     </div>
                 `;
