@@ -213,6 +213,9 @@
 
         let allData = [];
         let assessorUnitFilter = ""; // Variabel pengunci filter Unit Kerja
+        
+        // Set ini berfungsi menyimpan nama-nama kandidat yang SUDAH dinilai
+        let assessedCandidates = new Set();
 
         // DOM Elements
         const identitasContainer = document.getElementById('identitasContainer');
@@ -333,13 +336,14 @@
             }
         }
 
-        // 4. LOGIKA FILTER DASHBOARD (Berdasarkan Unit Kerja Penilai)
+        // 4. LOGIKA FILTER DASHBOARD (Berdasarkan Unit Kerja Penilai & Status Penilaian)
         function filterData() {
             const dataForCards = allData.filter(row => {
                 const unit = (row['UNIT KERJA'] || '').toLowerCase();
+                const nama = row['NAMA'] || '';
 
-                // WAJIB MATCH DENGAN UNIT KERJA PENILAI
-                return (unit === assessorUnitFilter);
+                // WAJIB MATCH DENGAN UNIT KERJA PENILAI dan BELUM ADA DI DAFTAR assessedCandidates
+                return (unit === assessorUnitFilter) && !assessedCandidates.has(nama);
             });
 
             renderCards(dataForCards);
@@ -398,15 +402,26 @@
             btnSubmitForm.textContent = 'Menyimpan Data...';
             
             const formData = new FormData(cultureFitForm);
+            
+            // Ambil nama kandidat yang baru saja dinilai
+            const namaKandidatSelesai = document.getElementById('hidden_nama_kandidat').value;
 
             fetch(URL_APPS_SCRIPT, { method: 'POST', body: formData })
                 .then(response => {
-                    alert('Penilaian Culture Fit telah berhasil disimpan ke Spreadsheet!');
+                    alert('Penilaian 360 Akseptasi Kandidat telah berhasil disimpan!');
+                    
+                    // 1. Tambahkan kandidat ke Set supaya tidak muncul lagi
+                    assessedCandidates.add(namaKandidatSelesai);
+                    
+                    // 2. Tutup Form
                     closeAssessment();
+                    
+                    // 3. Refresh Data Dashboard (Otomatis menghilangkan kartu kandidat yang tadi)
+                    filterData();
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    alert('Gagal menyimpan data. Pastikan koneksi internet stabil dan URL App Script benar.');
+                    alert('Gagal menyimpan data. Pastikan koneksi internet stabil.');
                 })
                 .finally(() => {
                     btnSubmitForm.disabled = false;
@@ -417,11 +432,20 @@
         // RENDER KARTU KANDIDAT
         function renderCards(data) {
             container.innerHTML = '';
-            countLabel.textContent = `${data.length} kandidat`;
+            
             if(data.length === 0) { 
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-medium bg-white rounded-xl border-2 border-dashed border-gray-200">Tidak ada data kandidat untuk Unit Kerja Anda.</div>`; 
+                // Mengubah pesan jika semua sudah dinilai
+                if(assessedCandidates.size > 0) {
+                    countLabel.textContent = `Selesai!`;
+                    container.innerHTML = `<div class="col-span-full text-center py-12 text-indigo-700 font-bold text-xl bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-200">🎉 Luar biasa! Semua kandidat di Unit Kerja Anda telah selesai dinilai.</div>`; 
+                } else {
+                    countLabel.textContent = `0 kandidat`;
+                    container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-medium bg-white rounded-xl border-2 border-dashed border-gray-200">Tidak ada data kandidat untuk Unit Kerja Anda.</div>`; 
+                }
                 return; 
             }
+
+            countLabel.textContent = `${data.length} kandidat tersisa`;
 
             data.forEach(row => {
                 const card = document.createElement('div');
@@ -451,7 +475,7 @@
                         <div class="space-y-2 text-sm mt-4">
                             <div class="flex justify-between items-start border-b border-gray-50 pb-1.5"><span class="text-gray-500 whitespace-nowrap mr-2">Unit Kerja</span><span class="font-semibold text-gray-800 text-right">${unitKerja}</span></div>
                             <div class="flex justify-between items-center border-b border-gray-50 pb-1.5"><span class="text-gray-500">Usia</span><span class="font-medium text-gray-800">${usia}</span></div>
-                                                      
+                                                                        
                             <div class="my-3 border-t-2 border-dashed border-gray-200"></div>
                             
                             <div class="flex justify-between items-start border-b border-gray-50 pb-1.5"><span class="text-gray-500 whitespace-nowrap mr-2">Peminatan Segmen</span><span class="font-medium text-indigo-700 text-right">${bidangDituju}</span></div>
