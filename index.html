@@ -89,7 +89,7 @@
             <div id="scrollableArea" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 scroll-smooth bg-gray-50">
                 
                 <div id="candidateContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-                    </div>
+                </div>
 
                 <div id="assessmentSection" class="hidden bg-white rounded-xl shadow-lg border border-indigo-200 p-8 mb-20 max-w-4xl mx-auto">
                     <div class="border-b border-gray-200 pb-4 mb-6 flex justify-between items-end">
@@ -111,9 +111,10 @@
                         <input type="hidden" id="hidden_jabatan_penilai" name="jabatan_penilai">
                         <input type="hidden" id="hidden_unit_penilai" name="unit_penilai">
 
+                        <!-- PERUBAHAN: Menambahkan flex-col sm:flex-row flex-wrap agar responsif di HP -->
                         <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
                             <p class="font-bold text-gray-800 mb-3">Apakah Saudara mengenal dan aktif berkomunikasi dengan pegawai yang di assess?</p>
-                            <div class="flex flex-wrap gap-6 mb-4">
+                            <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 mb-4">
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="Tidak Pernah" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Pernah Berkomunikasi</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="Pasif" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Pasif Berkomunikasi</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q_kenal_score" value="Aktif" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Aktif Berkomunikasi</span></label>
@@ -123,11 +124,11 @@
 
                         <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
                             <p class="font-bold text-gray-800 mb-3">1. Apakah kandidat memiliki pemahaman atas tugas & tanggung jawab pekerjaannya di Unit Kerja?</p>
-                            <div class="flex gap-6 mb-4">
+                            <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 mb-4">
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="2" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Kurang Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q1_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Setuju</span></label>
                             </div>
                             <textarea name="q1_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
@@ -135,11 +136,11 @@
 
                         <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
                             <p class="font-bold text-gray-800 mb-3">2. Apakah kandidat secara aktif melakukan pengembangan diri yang mendukung tugas dan tanggung jawab pekerjaannya?  </p>
-                            <div class="flex gap-6 mb-4">
+                            <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 mb-4">
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="2" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Kurang Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q2_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Setuju</span></label>
                             </div>
                             <textarea name="q2_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
@@ -147,11 +148,11 @@
 
                         <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
                             <p class="font-bold text-gray-800 mb-3">3. Apakah kandidat berkomunikasi aktif dan bekerjasama dengan baik antar rekan kerja?</p>
-                            <div class="flex gap-6 mb-4">
+                            <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 mb-4">
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="2" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Kurang Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q3_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Setuju</span></label>
                             </div>
                             <textarea name="q3_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
@@ -159,11 +160,11 @@
 
                         <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
                             <p class="font-bold text-gray-800 mb-3">4. Apakah kandidat mampu menjalankan pekerjaan sehari–hari sesuai ketentuan?</p>
-                            <div class="flex gap-6 mb-4">
+                            <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 mb-4">
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="2" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Kurang Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q4_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Setuju</span></label>
                             </div>
                             <textarea name="q4_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
@@ -171,11 +172,11 @@
 
                         <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
                             <p class="font-bold text-gray-800 mb-3">5. Apakah kandidat memiliki sikap & perilaku kerja yang mencerminkan nilai-nilai Go Spirit di Unit Kerja?</p>
-                            <div class="flex gap-6 mb-4">
+                            <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 mb-4">
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="1" class="w-4 h-4 text-indigo-600" required> <span class="text-gray-700">Tidak Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="2" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Kurang Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
-<label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="3" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Cukup Setuju</span></label>
+                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="4" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Setuju</span></label>
                                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="q5_score" value="5" class="w-4 h-4 text-indigo-600"> <span class="text-gray-700">Sangat Setuju</span></label>
                             </div>
                             <textarea name="q5_note" rows="2" placeholder="Tuliskan catatan/penjelasan singkat di sini..." class="w-full border-gray-300 rounded-md shadow-sm p-3 border text-sm"></textarea>
