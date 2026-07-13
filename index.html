@@ -456,8 +456,8 @@
                 const jabatan = row['JABATAN'] || '-';
                 const unitKerja = row['UNIT KERJA'] || '-';
                 const usia = row['USIA'] || '-';
-                const bidangDituju = findValue(row, ['Bidang'], '-');
-                const jabatanDituju = findValue(row, ['Jabatan', 'Dituju'], '-');
+                const status = findValue(row, ['Status'], '-');
+             
 
                 const embedUrl = getDriveEmbedUrl(row['FOTO'] || '');
                 const fotoHtml = embedUrl ? 
@@ -468,7 +468,7 @@
                     <div class="flex-grow">
                         <div class="text-center border-b border-gray-100 pb-3 mb-3">
                             <h3 class="text-xl font-bold text-gray-900 leading-tight">${nama}</h3>
-                            <p class="text-sm font-medium text-indigo-600 mt-1">${jabatan}</p>
+                          
                         </div>
                         
                         ${fotoHtml}
@@ -479,8 +479,8 @@
                                                                         
                             <div class="my-3 border-t-2 border-dashed border-gray-200"></div>
                             
-                            <div class="flex justify-between items-start border-b border-gray-50 pb-1.5"><span class="text-gray-500 whitespace-nowrap mr-2">Peminatan Segmen</span><span class="font-medium text-indigo-700 text-right">${bidangDituju}</span></div>
-                            <div class="flex justify-between items-start pb-1"><span class="text-gray-500 whitespace-nowrap mr-2">Peminatan Jabatan</span><span class="font-medium text-indigo-700 text-right">${jabatanDituju}</span></div>
+                            <div class="flex justify-between items-start border-b border-gray-50 pb-1.5"><span class="text-gray-500 whitespace-nowrap mr-2">Posisi Saat ini :</span><span class="font-medium text-indigo-700 text-right">${jabatan}</span></div>
+                            <div class="flex justify-between items-start pb-1"><span class="text-gray-500 whitespace-nowrap mr-2">Status</span><span class="font-medium text-indigo-700 text-right">${status}</span></div>
                         </div>
                     </div>
                     
